@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
+import '../widgets/transaction_list.dart';
+import '../screens/new_transaction_screen.dart';
 import '../providers/transactions.dart';
 
 class TransactionsScreen extends StatelessWidget {
   static const routeName = '/transactions';
   @override
   Widget build(BuildContext context) {
-    final transData = Provider.of<Transactions>(context);
-    final transactions = transData.transactions;
     return Scaffold(
       appBar: AppBar(
         title: Text('AccessSystem Payments'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(NewTransactionScreen.routeName);
+            },
+          ),
+        ],
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: transactions.length,
-        itemBuilder: (ctx, index) {
-          return ListTile(
-            leading: Padding(
-              padding: EdgeInsets.all(5),
-              child: FittedBox(
-                child: Text('£${(transactions[index].amount / 100).toStringAsFixed(2)}'),
-              ),
-            ),
-            title: Text(transactions[index].reason),
-            subtitle: Text(DateFormat("d/M/y").format(transactions[index].addedOn), ),
-          );
-        }
-      ),
+      body: TransactionList(),
+      // Add balance display at top of screen?
     );
   }
 }

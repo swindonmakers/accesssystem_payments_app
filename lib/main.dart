@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import './screens/transactions_screen.dart';
 import './screens/config_screen.dart';
+import './screens/new_transaction_screen.dart';
 import './providers/transactions.dart';
 import './providers/config.dart';
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         routes: {
           TransactionsScreen.routeName: (_) => TransactionsScreen(),
           ConfigScreen.routeName: (_) => ConfigScreen(),
+          NewTransactionScreen.routeName: (_) => NewTransactionScreen(),
         },
       ),
       );

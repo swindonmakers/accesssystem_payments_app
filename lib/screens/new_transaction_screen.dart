@@ -32,7 +32,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text('An error occured'),
-          content: Text('Something went wrong'),
+          content: Text('Something went wrong: $error'),
           actions: <Widget> [
             FlatButton(
               child: Text('Okay'),

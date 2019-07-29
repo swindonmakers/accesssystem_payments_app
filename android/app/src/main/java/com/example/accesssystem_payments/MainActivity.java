@@ -1,4 +1,4 @@
-package com.example.accesssystem_payments;
+package uk.me.jandj.accesssystem_payments;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

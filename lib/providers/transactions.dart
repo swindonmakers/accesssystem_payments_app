@@ -62,7 +62,7 @@ class Transactions extends ChangeNotifier {
     if(config.userGuid.isEmpty) {
       // throw exception?
       print('No userGuid set yet!');
-      throw UserException('Please enter a user Key in settings');
+      throw UserException('Please Login first');
     }
     try {
       String url = config.apiUrl + '/get_transactions/10/'+config.hash;

@@ -79,7 +79,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
                           // snackbar?
                         },
                         validator: (value) {
-                          if(value.isEmpty || value.length != 36) {
+                          // Empty is allowed, to logout
+                          if(value.length > 0  && value.length != 36) {
                             return 'Please enter a 36-character guid';
                           }
                           return null;

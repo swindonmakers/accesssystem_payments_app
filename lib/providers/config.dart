@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+
+import '../models/http_exception.dart';
 
 class Config extends ChangeNotifier {
   final String _api_key = 'access_system_api_url';
@@ -57,6 +60,21 @@ class Config extends ChangeNotifier {
       print('Loaded: ${_userGuid} ${_apiUrl}');
     } catch (error) {
       print('Load failed! $error');
+    }
+  }
+
+  Future<void> loginUser(String ref) async {
+    print('login user $ref');
+    String url = apiUrl + '/user_guid_request?userid=$ref';
+    try {
+      final response = await http.get(url);
+      print(response.body);
+      if(response.statusCode >= 400) {
+        throw HttpException('Error sending login email: ${response.body}');
+      }
+    } catch(error) {
+      print(error);
+      throw(error);
     }
   }
 }

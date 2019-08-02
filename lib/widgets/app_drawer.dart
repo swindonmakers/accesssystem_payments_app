@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.face),
             title: Text('Login'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+              Navigator.of(context).pushNamed(LoginScreen.routeName);
             },
           ),
         ],

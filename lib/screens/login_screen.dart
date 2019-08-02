@@ -13,12 +13,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   static final _form = GlobalKey<FormState>();
+  var _isLoading = false;
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     if(!_form.currentState.validate()) {
       return;
     }
-    _form.currentState.save();
+    setState(() { _isLoading = true; });
+    await _form.currentState.save();
+    setState(() { _isLoading = false; });
   }
   
   @override
@@ -35,7 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
+      body: _isLoading
+      ? Center(
+        child: CircularProgressIndicator(),
+      )
+      : Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _form,
@@ -59,9 +66,50 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
                 onSaved: (value) async {
-                  // do we want to "wait" on this?
                   await config.fetch();
-                  config.loginUser(value);
+                  try {
+                    await config.loginUser(value);
+                    await showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text('Login'),
+                        content: Text('You have been sent an email with your login key'),
+                        actions: <Widget> [
+                          FlatButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              setState(() {
+                                  _isLoading = false;
+                              });
+                              Navigator.of(ctx).pop();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+//                    Navigator.of(context).pop();
+                  } catch(error) {
+                    print(error);
+                    await showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text('An error occured'),
+                        content: Text(error.toString()),
+                        actions: <Widget> [
+                          FlatButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              setState(() {
+                                  _isLoading = false;
+                              });
+                              Navigator.of(ctx).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
               ),
             ],

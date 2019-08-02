@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
+import '../models/login_exception.dart';
 
 class Config extends ChangeNotifier {
   final String _api_key = 'access_system_api_url';
@@ -71,6 +72,10 @@ class Config extends ChangeNotifier {
       print(response.body);
       if(response.statusCode >= 400) {
         throw HttpException('Error sending login email: ${response.body}');
+      }
+      var result = json.decode(response.body) as Map<String, dynamic>;
+      if(result['success'] == 0) {
+        throw LoginException(result['error']);
       }
     } catch(error) {
       print(error);

@@ -61,7 +61,6 @@ class Transactions extends ChangeNotifier {
   Future<void> fetchAndSetTransactions() async {
     await config.fetch();
     if(config.userGuid.isEmpty) {
-      // throw exception?
       print('No userGuid set yet!');
       throw UserException('Please Login first');
     }

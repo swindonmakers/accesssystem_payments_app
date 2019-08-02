@@ -19,7 +19,12 @@ class TransactionList extends StatelessWidget {
           leading: Padding(
             padding: EdgeInsets.all(5),
             child: FittedBox(
-              child: Text('£${(_transactions[index].amount / 100).toStringAsFixed(2)}'),
+              child: Text('£${(_transactions[index].amount.abs() / 100).toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontWeight: _transactions[index].amount < 0 ? FontWeight.bold : FontWeight.normal,
+                  color: _transactions[index].amount < 0 ? Theme.of(context).errorColor : Theme.of(context).accentColor,
+                ),
+              ),
             ),
           ),
           title: Text(_transactions[index].reason),

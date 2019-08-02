@@ -87,7 +87,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         children: <Widget> [
           ListTile(
             leading: Text('Current Balance:'),
-            trailing: Text(transData.userBalance.toStringAsFixed(2)),
+            trailing: Text(transData.userBalance.abs().toStringAsFixed(2),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: transData.userBalance < 0 ? Theme.of(context).errorColor : Theme.of(context).accentColor,
+              ),
+            ),
           ),
           Expanded(
             child: TransactionList(transactions),

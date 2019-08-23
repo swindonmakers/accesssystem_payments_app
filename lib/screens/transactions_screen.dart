@@ -5,6 +5,7 @@ import '../models/user_exception.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/transaction_list.dart';
 import '../screens/new_transaction_screen.dart';
+import '../screens/login_screen.dart';
 import '../providers/transactions.dart';
 
 class TransactionsScreen extends StatefulWidget {
@@ -77,28 +78,35 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       )
       : !_hasUser
       ? Center(
-        child: Text(_errorMessage),
+        child: FlatButton(
+          child: Text(_errorMessage),
+          onPressed: () {
+            Navigator.of(context).pushNamed(LoginScreen.routeName);
+          },
+        ),
       )
       : _hasFailed
       ?  Center(
         child: Text('Error loading transactions, pull to retry: $_errorMessage')
       )
-      : Column(
-        children: <Widget> [
-          ListTile(
-            leading: Text('Current Balance:'),
-            trailing: Text(transData.userBalance.abs().toStringAsFixed(2),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: transData.userBalance < 0 ? Theme.of(context).errorColor : Theme.of(context).accentColor,
+      : RefreshIndicator(
+        onRefresh: () => _refreshTransactions(context),
+        child: Column(
+          children: <Widget> [
+            ListTile(
+              leading: Text('Current Balance:'),
+              trailing: Text(transData.userBalance.abs().toStringAsFixed(2),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: transData.userBalance < 0 ? Theme.of(context).errorColor : Theme.of(context).accentColor,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: TransactionList(transactions),
-          ),
-        ],
-        // Add balance display at top of screen?
+            Expanded(
+              child: TransactionList(transactions),
+            ),
+          ],
+        ),
       ),
     );
   }

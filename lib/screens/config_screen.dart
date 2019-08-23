@@ -19,7 +19,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
   @override
   void initState() {
-    _isLoading = true;
+    setState(() => _isLoading = true);
     Provider.of<Config>(context, listen:false).fetch()
     .then((_) {
         setState(() { _isLoading = false; });
@@ -72,7 +72,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       child: TextFormField(
                         initialValue: config.userGuid,
                         decoration: InputDecoration(
-                          labelText: 'Key',
+                          labelText: 'Key (Use the Login form to get a Key emailed)',
                         ),
                         onFieldSubmitted: (value) {
                           config.userGuid = value;

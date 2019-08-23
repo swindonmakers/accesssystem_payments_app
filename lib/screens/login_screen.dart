@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
 import '../providers/config.dart';
+import './config_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login-screen';
@@ -20,8 +21,53 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     setState(() { _isLoading = true; });
-    await _form.currentState.save();
-    setState(() { _isLoading = false; });
+    _form.currentState.save();
+  }
+
+  Future<void> _loginUser(Config config, String value) async {
+    await config.fetch();
+    try {
+      await config.loginUser(value);
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Login'),
+          content: Text('You have been sent an email with your login key'),
+          actions: <Widget> [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                setState(() {
+                    _isLoading = false;
+                });
+                Navigator.of(ctx).pop();
+                Navigator.of(context).pushNamed(ConfigScreen.routeName);
+              },
+            ),
+          ],
+        ),
+      );
+    } catch(error) {
+      print(error);
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An error occured'),
+          content: Text(error.toString()),
+          actions: <Widget> [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                setState(() {
+                    _isLoading = false;
+                });
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
   
   @override
@@ -65,52 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   return null;
                 },
-                onSaved: (value) async {
-                  await config.fetch();
-                  try {
-                    await config.loginUser(value);
-                    await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text('Login'),
-                        content: Text('You have been sent an email with your login key'),
-                        actions: <Widget> [
-                          FlatButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              setState(() {
-                                  _isLoading = false;
-                              });
-                              Navigator.of(ctx).pop();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-//                    Navigator.of(context).pop();
-                  } catch(error) {
-                    print(error);
-                    await showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text('An error occured'),
-                        content: Text(error.toString()),
-                        actions: <Widget> [
-                          FlatButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              setState(() {
-                                  _isLoading = false;
-                              });
-                              Navigator.of(ctx).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
+                onSaved: (value) => _loginUser(config, value),
               ),
             ],
           ),

@@ -67,7 +67,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Amount',
+                  labelText: 'Amount in £',
                 ),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,

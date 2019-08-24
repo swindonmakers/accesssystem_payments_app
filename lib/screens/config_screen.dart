@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 
 import '../providers/config.dart';
 import '../widgets/app_drawer.dart';
@@ -14,6 +15,7 @@ class ConfigScreen extends StatefulWidget {
 class _ConfigScreenState extends State<ConfigScreen> {
   static final _guid_form = GlobalKey<FormState>();
   static final _url_form = GlobalKey<FormState>();
+  static final _theme_form = GlobalKey<FormState>();
 
   var _isLoading = false;
 
@@ -129,8 +131,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
                           config.save();
                         },
                       ), //TextFormField
-                    ), // Expanded
-                  ),
+                    ), // Padding
+                  ), // Expanded
                   IconButton(
                     icon: Icon(Icons.save),
                     onPressed: _saveUrlForm
@@ -139,6 +141,28 @@ class _ConfigScreenState extends State<ConfigScreen> {
               ),
             ),
           ), //Form
+          Form(
+            key: _theme_form,
+            child: Container(
+              child: SwitchListTile(
+                title: const Text('Dark Theme'),
+                value: Theme.of(context).brightness == Brightness.dark ? true: false,
+                onChanged: (bool value) {
+                  DynamicTheme.of(context).setBrightness(value ? Brightness.dark : Brightness.light);
+                },
+              )
+            )
+          ),
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget> [
+              //     Expanded(
+              //       padding: Padding(
+              //         padding: const EdgeInsets.all(5),
+              //         child: const Text('Theme selection'),
+              //       ),
+              //     ), // Expanded
+                
         ],
       ),
     );

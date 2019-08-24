@@ -153,16 +153,6 @@ class _ConfigScreenState extends State<ConfigScreen> {
               )
             )
           ),
-              // child: Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: <Widget> [
-              //     Expanded(
-              //       padding: Padding(
-              //         padding: const EdgeInsets.all(5),
-              //         child: const Text('Theme selection'),
-              //       ),
-              //     ), // Expanded
-                
         ],
       ),
     );

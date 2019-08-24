@@ -61,7 +61,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     final transactions = transData.transactions;
     return Scaffold(
       appBar: AppBar(
-        title: Text('AccessSystem Payments'),
+        title: Text('Your Transactions'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),

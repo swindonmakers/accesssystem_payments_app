@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/user_exception.dart';
 import '../widgets/app_drawer.dart';
@@ -28,15 +29,18 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         _isLoading = true;
     });
 
-    Provider.of<Transactions>(context, listen:false).fetchAndSetTransactions()
+    var client = new http.Client();
+    Provider.of<Transactions>(context, listen:false).fetchAndSetTransactions(client)
     .then((_) {
         setState(() { _isLoading = false; _hasUser = true; });
+        client.close();
     }).catchError((error) {
         setState(() {
             _isLoading = false;
             _hasUser = false;
             _errorMessage = error.toString();
         });
+        client.close();
       },
       test: (e) => e is UserException,
     ).catchError((error) {
@@ -45,6 +49,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             _hasFailed = true;
             _errorMessage = error.toString();
         });
+        client.close();
     });
   }
 

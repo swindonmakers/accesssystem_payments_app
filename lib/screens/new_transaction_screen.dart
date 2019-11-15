@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../providers/transactions.dart';
 
@@ -24,9 +25,10 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
       return;
     }
     _form.currentState.save();
+    var client = http.Client();
     try {
-      await Provider.of<Transactions>(context, listen: false)
-      .addTransaction(_newTransaction);
+      final result = await Provider.of<Transactions>(context, listen: false)
+      .addTransaction(client, _newTransaction);
     } catch(error) {
       await showDialog(
         context: context,
@@ -43,6 +45,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
           ],
         ),
       );
+    } finally {
+      client.close();
     }
     Navigator.of(context).pop();
   }
@@ -105,8 +109,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                   if(value.isEmpty) {
                     return 'Please enter a description';
                   }
-                  if(value.length < 10) {
-                    return 'Description should be at least 10 characters';
+                  if(value.length < 2) {
+                    return 'Description should be at least 2 characters';
                   }
                   return null;
                 },

@@ -29,12 +29,12 @@ class Transactions extends ChangeNotifier {
     return _userBalance;
   }
   
-  Future<void> addTransaction(Transaction newT) async {
+  Future<bool> addTransaction(http.Client http, Transaction newT) async {
     print('Saving a Transaction');
     await config.fetch();
     if(config.userGuid.isEmpty) {
       // throw exception?
-      print('No userGuid set yet!');
+      //print('No userGuid set yet!');
       throw UserException('Please enter a user Key in settings');
     }
 
@@ -52,13 +52,16 @@ class Transactions extends ChangeNotifier {
       if(response.statusCode >= 400) {
         throw HttpException('Error creating transaction');
       }
+      final extractedResult = json.decode(response.body) as Map<String, dynamic>;
+      return extractedResult['success'] == 1;
+      
     } catch(error) {
       print(error);
       throw(error);
     }
   }
   
-  Future<void> fetchAndSetTransactions() async {
+  Future<void> fetchAndSetTransactions(http.Client http) async {
     await config.fetch();
     if(config.userGuid.isEmpty) {
       print('No userGuid set yet!');

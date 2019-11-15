@@ -36,8 +36,8 @@ class Config extends ChangeNotifier {
 
   String get hash {
     var bytes = utf8.encode(DateFormat('yyyy-MM-dd').format(DateTime.now()) + _userGuid);
-    print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-    print(bytes);
+   // print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+   // print(bytes);
     return md5.convert(bytes).toString();
   }
 

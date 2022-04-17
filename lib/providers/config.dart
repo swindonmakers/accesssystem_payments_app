@@ -42,7 +42,7 @@ class Config extends ChangeNotifier {
   }
 
   Future<void> save() async {
-    print('Saving: ${_userGuid} ${_apiUrl}');
+    print('Saving: $_userGuid $_apiUrl');
     try {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(_api_key, _apiUrl);
@@ -58,7 +58,7 @@ class Config extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       _apiUrl = prefs.getString(_api_key) ?? _defaultUrl;
       _userGuid = prefs.getString(_guid_key) ?? '';
-      print('Loaded: ${_userGuid} ${_apiUrl}');
+      print('Loaded: $_userGuid $_apiUrl');
     } catch (error) {
       print('Load failed! $error');
     }
@@ -66,7 +66,7 @@ class Config extends ChangeNotifier {
 
   Future<void> loginUser(String ref) async {
     print('login user $ref');
-    String url = apiUrl + '/user_guid_request?userid=$ref';
+    var url = Uri.parse(apiUrl + '/user_guid_request?userid=$ref');
     try {
       final response = await http.get(url);
       print(response.body);
@@ -79,7 +79,7 @@ class Config extends ChangeNotifier {
       }
     } catch(error) {
       print(error);
-      throw(error);
+      rethrow;
     }
   }
 }

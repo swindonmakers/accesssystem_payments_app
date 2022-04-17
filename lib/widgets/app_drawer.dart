@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 import '../screens/config_screen.dart';
@@ -8,6 +10,8 @@ import '../providers/config.dart';
 class AppDrawer extends StatelessWidget {
   final Config config = Config();
 
+  AppDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     config.fetch();
@@ -16,38 +20,38 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Menu'),
+            title: const Text('Menu'),
             automaticallyImplyLeading: false,
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(TransactionsScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(ConfigScreen.routeName);
             },
           ),
-          Divider(),
-          !config.userGuid.isEmpty
+          const Divider(),
+          config.userGuid.isNotEmpty
           ? ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Logout'),
+            leading: const Icon(Icons.verified_user),
+            title: const Text('Logout'),
             onTap: () {
               config.userGuid = '';
               config.save();
             },
           )
           : ListTile(
-            leading: Icon(Icons.face),
-            title: Text('Login'),
+            leading: const Icon(Icons.face),
+            title: const Text('Login'),
             onTap: () {
               Navigator.of(context).pushNamed(LoginScreen.routeName);
             },

@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -9,13 +11,15 @@ import './screens/login_screen.dart';
 import './providers/transactions.dart';
 import './providers/config.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
           value: Transactions(),
@@ -25,23 +29,23 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: DynamicTheme(
-        defaultBrightness: Brightness.light,
-        data: (brightness) => ThemeData(
+        defaultThemeMode: ThemeMode.light,
+        data: (themeMode) => ThemeData(
           primarySwatch: Colors.amber,
           primaryColor: Colors.amber.shade900,
-          accentColor: Colors.amberAccent.shade700,
-          brightness: brightness,
+//          accentColor: Colors.amberAccent.shade700,
+          brightness: themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light,
         ),
-        themedWidgetBuilder: (context, theme) {
+        themedWidgetBuilder: (_,__, theme) {
           return MaterialApp(
             title: 'Makerspace Payments',
             theme: theme,
-            home: TransactionsScreen(),
+            home: const TransactionsScreen(),
             routes: {
-              TransactionsScreen.routeName: (_) => TransactionsScreen(),
-              ConfigScreen.routeName: (_) => ConfigScreen(),
-              NewTransactionScreen.routeName: (_) => NewTransactionScreen(),
-              LoginScreen.routeName: (_) => LoginScreen(),
+              TransactionsScreen.routeName: (_) => const TransactionsScreen(),
+              ConfigScreen.routeName: (_) => const ConfigScreen(),
+              NewTransactionScreen.routeName: (_) => const NewTransactionScreen(),
+              LoginScreen.routeName: (_) => const LoginScreen(),
             },
           );
         }

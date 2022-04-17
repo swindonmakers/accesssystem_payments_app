@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +13,8 @@ import '../providers/transactions.dart';
 
 class TransactionsScreen extends StatefulWidget {
   static const routeName = '/transactions';
+
+  const TransactionsScreen({Key? key}) : super(key: key);
   @override
   _TransactionsScreenState createState() => _TransactionsScreenState();
 }
@@ -29,7 +33,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         _isLoading = true;
     });
 
-    var client = new http.Client();
+    var client = http.Client();
     Provider.of<Transactions>(context, listen:false).fetchAndSetTransactions(client)
     .then((_) {
         setState(() { _isLoading = false; _hasUser = true; });
@@ -66,10 +70,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     final transactions = transData.transactions;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Transactions'),
+        title: const Text('Your Transactions'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).pushNamed(NewTransactionScreen.routeName);
             },
@@ -78,12 +82,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       ),
       drawer: AppDrawer(),
       body:  _isLoading
-      ? Center(
+      ? const Center(
         child: CircularProgressIndicator(),
       )
       : !_hasUser
       ? Center(
-        child: FlatButton(
+        child: TextButton(
           child: Text(_errorMessage),
           onPressed: () {
             Navigator.of(context).pushNamed(LoginScreen.routeName);
@@ -99,11 +103,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         child: Column(
           children: <Widget> [
             ListTile(
-              leading: Text('Current Balance:'),
+              leading: const Text('Current Balance:'),
               trailing: Text(transData.userBalance.abs().toStringAsFixed(2),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: transData.userBalance < 0 ? Theme.of(context).errorColor : Theme.of(context).accentColor,
+                  color: transData.userBalance < 0 ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

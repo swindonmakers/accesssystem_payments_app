@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +8,8 @@ import '../providers/transactions.dart';
 
 class NewTransactionScreen extends StatefulWidget {
   static const routeName = '/new-transaction';
+
+  const NewTransactionScreen({Key? key}) : super(key: key);
 
   @override
   _NewTransactionScreenState createState() => _NewTransactionScreenState();
@@ -16,28 +20,29 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   static final _form = GlobalKey<FormState>();
   final _reasonFocusNode = FocusNode();
   Transaction _newTransaction = Transaction(
+    addedOn: DateTime.now(),
     amount: 0,
     reason: '',
   );
 
   Future<void> _saveForm() async {
-    if(!_form.currentState.validate()) {
+    if(!_form.currentState!.validate()) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     var client = http.Client();
     try {
-      final result = await Provider.of<Transactions>(context, listen: false)
+      await Provider.of<Transactions>(context, listen: false)
       .addTransaction(client, _newTransaction);
     } catch(error) {
       await showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('An error occured'),
+          title: const Text('An error occured'),
           content: Text('Something went wrong: $error'),
           actions: <Widget> [
-            FlatButton(
-              child: Text('Okay'),
+            TextButton(
+              child: const Text('Okay'),
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -55,10 +60,10 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pay for item'),
+        title: const Text('Pay for item'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: _saveForm,
           ),
         ],
@@ -70,7 +75,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Amount in £',
                 ),
                 textInputAction: TextInputAction.next,
@@ -79,26 +84,27 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                   FocusScope.of(context).requestFocus(_reasonFocusNode);
                 },
                 validator: (value) {
-                  if(value.isEmpty) {
+                  if(value!.isEmpty) {
                     return 'Please enter an amount';
                   }
                   if(double.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
                   if(double.parse(value) <= 0) {
-                    return 'Please enter a number greater than 0';
+                    return 'Please enter an amount in £';
                   }
                   return null;
                 },
                 onSaved: (value) {
                   _newTransaction = Transaction(
+                    addedOn: DateTime.now(),
                     reason: _newTransaction.reason,
-                    amount: (double.parse(value) * 100).toInt(),
+                    amount: (double.parse(value!) * 100).toInt(),
                   );
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'For What',
                 ),
                 maxLines: 3,
@@ -106,7 +112,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                 textInputAction: TextInputAction.done,
                 focusNode: _reasonFocusNode,
                 validator: (value) {
-                  if(value.isEmpty) {
+                  if(value!.isEmpty) {
                     return 'Please enter a description';
                   }
                   if(value.length < 2) {
@@ -116,8 +122,9 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                 },
                 onSaved: (value) {
                   _newTransaction = Transaction(
+                    addedOn: DateTime.now(),
                     amount: _newTransaction.amount,
-                    reason: value,
+                    reason: value!,
                   );
                 },
               ),

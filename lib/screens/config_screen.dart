@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -7,6 +9,8 @@ import '../widgets/app_drawer.dart';
 
 class ConfigScreen extends StatefulWidget {
   static const routeName = '/config';
+
+  const ConfigScreen({Key? key}) : super(key: key);
 
   @override
   _ConfigScreenState createState() => _ConfigScreenState();
@@ -31,19 +35,19 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
   void _saveGuidForm() {
     print(_guid_form);
-    final isValid = _guid_form.currentState.validate();
+    final bool isValid = _guid_form.currentState!.validate();
     if(!isValid) {
       return;
     }
-    _guid_form.currentState.save();
+    _guid_form.currentState!.save();
   }
 
   void _saveUrlForm() {
-    final isValid = _url_form.currentState.validate();
+    final isValid = _url_form.currentState!.validate();
     if(!isValid) {
       return;
     }
-    _url_form.currentState.save();
+    _url_form.currentState!.save();
   }
 
   
@@ -53,11 +57,11 @@ class _ConfigScreenState extends State<ConfigScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       drawer: AppDrawer(),
       body: _isLoading
-      ? Center(
+      ? const Center(
         child: CircularProgressIndicator(),
       )
       : Column(
@@ -73,7 +77,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       padding: const EdgeInsets.all(5),
                       child: TextFormField(
                         initialValue: config.userGuid,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Key (Use the Login form to get a Key emailed)',
                         ),
                         onFieldSubmitted: (value) {
@@ -82,7 +86,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                         },
                         validator: (value) {
                           // Empty is allowed, to logout
-                          if(value.length > 0  && value.length != 36) {
+                          if(value!.isNotEmpty  && value.length != 36) {
                             return 'Please enter a 36-character guid';
                           }
                           return null;
@@ -95,7 +99,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                     ),
                   ), // Expanded
                   IconButton(
-                    icon: Icon(Icons.save),
+                    icon: const Icon(Icons.save),
                     onPressed: _saveGuidForm
                   ),
                 ],
@@ -113,7 +117,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       padding: const EdgeInsets.all(5),
                       child: TextFormField(
                         initialValue: config.apiUrl,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'API URL',
                         ),
                         onFieldSubmitted: (value) {
@@ -121,7 +125,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                           // snackbar?
                         },
                         validator: (value) {
-                          if(value.isEmpty || !value.startsWith('http') ) {
+                          if(value!.isEmpty || !value.startsWith('http') ) {
                             return 'Please enter a URL';
                           }
                           return null;
@@ -134,7 +138,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                     ), // Padding
                   ), // Expanded
                   IconButton(
-                    icon: Icon(Icons.save),
+                    icon: const Icon(Icons.save),
                     onPressed: _saveUrlForm
                   ),
                 ],
@@ -148,7 +152,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 title: const Text('Dark Theme'),
                 value: Theme.of(context).brightness == Brightness.dark ? true: false,
                 onChanged: (bool value) {
-                  DynamicTheme.of(context).setBrightness(value ? Brightness.dark : Brightness.light);
+                  DynamicTheme.of(context).setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
                 },
               )
             )

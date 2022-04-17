@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +13,8 @@ class Transaction {
   final int amount;
   final String reason;
 
-  Transaction({this.addedOn, @required this.amount, @required this.reason});
+  Transaction({required this.addedOn, this.amount = 0, this.reason = ''});
+
 }
 
 class Transactions extends ChangeNotifier {
@@ -39,7 +42,7 @@ class Transactions extends ChangeNotifier {
     }
 
     try {
-      String url = config.apiUrl + '/transaction';
+      var url = Uri.parse(config.apiUrl + '/transaction');
       final response = await http.post(
         url,
         body: {
@@ -57,7 +60,7 @@ class Transactions extends ChangeNotifier {
       
     } catch(error) {
       print(error);
-      throw(error);
+      rethrow;
     }
   }
   
@@ -68,9 +71,9 @@ class Transactions extends ChangeNotifier {
       throw UserException('Please Login first');
     }
     try {
-      String url = config.apiUrl + '/get_transactions/10/'+config.hash;
+      var url = Uri.parse(config.apiUrl + '/get_transactions/10/'+config.hash);
       final response = await http.get(url);
-      final extractedData  = json.decode(response.body) as Map<String,dynamic>;
+      final extractedData  = json.decode(response.body) as Map<String,dynamic>?;
       if(extractedData == null) {
         return;
       }
